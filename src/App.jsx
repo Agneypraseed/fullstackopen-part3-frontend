@@ -113,26 +113,34 @@ const App = () => {
             name: newName,
             number: newNumber,
           };
-          phonebookService.updatePerson(person.id, newPerson).then((res) => {
-            if (res === undefined) {
-              setErrorMessage(
-                `Information of ${person.name} has already been removed from the server`
-              );
-              setPersons(persons.filter((o) => o.id !== person.id));
-              setFilteredPersons(
-                filterdPersons.filter((o) => o.id !== person.id)
-              );
-            } else {
-              setPersons(persons.map((o) => (o.id !== person.id ? o : res)));
-              setFilteredPersons(
-                filterdPersons.map((o) => (o.id !== person.id ? o : res))
-              );
-              setErrorMessage(`Updated ${newName}`);
+          phonebookService
+            .updatePerson(person.id, newPerson)
+            .then((res) => {
+              if (res === undefined) {
+                setErrorMessage(
+                  `Information of ${person.name} has already been removed from the server`
+                );
+                setPersons(persons.filter((o) => o.id !== person.id));
+                setFilteredPersons(
+                  filterdPersons.filter((o) => o.id !== person.id)
+                );
+              } else {
+                setPersons(persons.map((o) => (o.id !== person.id ? o : res)));
+                setFilteredPersons(
+                  filterdPersons.map((o) => (o.id !== person.id ? o : res))
+                );
+                setErrorMessage(`Updated ${newName}`);
+                setTimeout(() => {
+                  setErrorMessage(null);
+                }, 5000);
+              }
+            })
+            .catch((error) => {
+              setErrorMessage(error.response.data.error);
               setTimeout(() => {
                 setErrorMessage(null);
               }, 5000);
-            }
-          });
+            });
           e.target.reset();
         }
         saveFlag = false;
@@ -167,6 +175,9 @@ const App = () => {
         })
         .catch((error) => {
           setErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         });
     }
   };

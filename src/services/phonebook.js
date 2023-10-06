@@ -23,9 +23,7 @@ const deletePerson = (id) => {
 
 const updatePerson = (id, newPerson) => {
   const request = axios.put(`${baseUrl}/${id}`, newPerson);
-  return request
-    .then((response) => response.data)
-    .catch((err) => console.error("Error updating Phonebook", err));
+  return request.then((response) => response.data);
 };
 
 export default { getPhonebook, updatePhoneBook, deletePerson, updatePerson };
